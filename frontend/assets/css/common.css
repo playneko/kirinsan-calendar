@@ -1,0 +1,24 @@
+.text-center {
+  text-align: center;
+}
+.margin-top_20 {
+  margin-top: 20px;
+}
+.margin-left_25 {
+  margin-left: 25px;
+}
+.background_aeff50 {
+  background: #aeff50;
+}
+.top-left-radius_15 {
+  border-top-left-radius: 15px;
+}
+.top-right-radius_15 {
+  border-top-right-radius: 15px;
+}
+.vc-bordered {
+  border: 0px solid !important;
+}
+.font-title {
+  font-weight: bold;
+}
