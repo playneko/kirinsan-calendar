@@ -10,7 +10,14 @@ export default defineNuxtConfig({
     preset : 'github-pages' 
   },
   app : {
-    baseURL : '/kirinsan-calendar/' 
+    baseURL : '/kirinsan-calendar/',
+    head: {
+      link: [
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Darumadrop+One&family=Hi+Melody&family=Kiwi+Maru:wght@300;400;500&family=Mochiy+Pop+One&family=Single+Day&display=swap' }
+      ]
+    }
   },
   ssr: false,
   modules: [
@@ -43,15 +50,6 @@ export default defineNuxtConfig({
     public: {
       // API URL
       apiCalendarList: "http://35.233.198.201:3100/api/calendar/list",
-    }
-  },
-  app: {
-    head: {
-      link: [
-        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Darumadrop+One&family=Hi+Melody&family=Kiwi+Maru:wght@300;400;500&family=Mochiy+Pop+One&family=Single+Day&display=swap' }
-      ]
     }
   }
 })
