@@ -7,7 +7,12 @@ export default defineNuxtConfig({
     transpile: ['vuetify'],
   },
   nitro : {
-    preset : 'github-pages' 
+    preset : 'github-pages',
+    routeRules: {
+      '/api/**': {
+        proxy: 'http://35.233.198.201:3100/**'
+      }
+    }
   },
   app : {
     baseURL : '/kirinsan-calendar/',
