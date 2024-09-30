@@ -8,6 +8,11 @@ const isEmpty = (value: string | any[] | null | undefined) => {
   return false
 }
 
+const dateRaplace = (str: any) => {
+  const result = str.replace(/[^0-9]/g, ' ');
+  return dayjs(result).format('YYYY-MM-DD');
+}
+
 // 付き合う日抽出
 const withOfDate = (value: any) => {
   if (!isEmpty(value)) {
@@ -38,6 +43,10 @@ const calendarOfDate = (value: any) => {
     let withOfDate: any = dayjs(new Date()).format('YYYY-MM-DD');
     let selectDate: Object;
 
+    // 現在の日付
+    selectDate = { key: 'today', content: 'purple', dates: new Date() };
+    markedDates.push(selectDate);
+
     // 付き合う日抽出
     const type1Date: any = value.filter((calendar: any) => {
       return calendar.type === 1;
@@ -51,7 +60,7 @@ const calendarOfDate = (value: any) => {
         withOfDate = dayjs(getYear + "-" + getMonth + "-" + getDay).format('YYYY-MM-DD');
 
         if (!isEmpty(withOfDate)) {
-          selectDate = { highlight: 'green', dates: [ withOfDate ] };
+          selectDate = { highlight: { color: 'green', fillMode: 'outline' }, dates: [ withOfDate ] };
           // markedDates = Object.assign({}, markedDates, selectDate);
           markedDates.push(selectDate);
         }
@@ -62,7 +71,7 @@ const calendarOfDate = (value: any) => {
           const fullDate: any = dayjs(fullYear + "-" + getMonth + "-" + getDay).format('YYYY-MM-DD');
 
           if (!isEmpty(fullDate)) {
-            selectDate = { highlight: 'orange', dates: [ fullDate ] };
+            selectDate = { highlight: { color: 'orange', fillMode: 'outline' }, dates: [ fullDate ] };
             // markedDates = Object.assign({}, markedDates, selectDate);
             markedDates.push(selectDate);
           }
@@ -74,7 +83,7 @@ const calendarOfDate = (value: any) => {
           const plusDate: any = fullDate.add(i * 100, 'day').format('YYYY-MM-DD');
 
           if (!isEmpty(plusDate)) {
-            selectDate = { highlight: 'pink', dates: [ plusDate ] };
+            selectDate = { highlight: { color: 'pink', fillMode: 'outline' }, dates: [ plusDate ] };
             // markedDates = Object.assign({}, markedDates, selectDate);
             markedDates.push(selectDate);
           }
@@ -96,7 +105,7 @@ const calendarOfDate = (value: any) => {
 
             if (!isEmpty(fullDate)) {
               // selectDate = {[fullDate]: {selected: true, marked: true, selectedColor: 'blue'}};
-              selectDate = { highlight: 'blue', dates: [ fullDate ] };
+              selectDate = { highlight: { color: 'blue', fillMode: 'outline' }, dates: [ fullDate ] };
               // markedDates = Object.assign({}, markedDates, selectDate);
               markedDates.push(selectDate);
             }
@@ -118,7 +127,11 @@ const calendarOfDetail = (value: any, value2: any) => {
     const today: Date = new Date();
     let fullYear: number = today.getFullYear();
     let withOfDate: any = dayjs(new Date()).format('YYYY-MM-DD');
-    let markedDate: Object;
+    let selectDate: Object;
+
+    // 現在の日付
+    selectDate = { type: 'subheader', title: dayjs(value2).format('YYYY年MM月DD日') };
+    markedDates.push(selectDate);
 
     // 付き合う日抽出
     const type1Date: any = value.filter((calendar: any) => {
@@ -132,13 +145,17 @@ const calendarOfDetail = (value: any, value2: any) => {
         const getDay: String = getDate.day;
         withOfDate = dayjs(getYear + "-" + getMonth + "-" + getDay).format('YYYY-MM-DD');
 
-        if (!isEmpty(withOfDate) && !isEmpty(value2) && withOfDate === value2.dateString) {
-          markedDate = {
-            'date': withOfDate,
-            'type': 1,
-            'detail': '付き合う日'
-          }
-          markedDates.push(markedDate);
+        if (!isEmpty(withOfDate) && !isEmpty(value2) && withOfDate === value2) {
+          selectDate = { type: 'divider', inset: true };
+          markedDates.push(selectDate);
+          selectDate = {
+            date: withOfDate,
+            type: 1,
+            title: '付き合った日',
+            subtitle: '',
+            prependAvatar: '/_nuxt/assets/images/001.png'
+          };
+          markedDates.push(selectDate);
         }
 
         // 1周年、2周年、3周年...計算
@@ -146,13 +163,17 @@ const calendarOfDetail = (value: any, value2: any) => {
           const fullYear: String = String(Number(getDate.year) + i);
           const fullDate: any = dayjs(fullYear + "-" + getMonth + "-" + getDay).format('YYYY-MM-DD');
 
-          if (!isEmpty(fullDate) && !isEmpty(value2) && fullDate === value2.dateString) {
-            markedDate = {
-              'date': fullDate,
-              'type': 2,
-              'detail': '付き合って' + i + '年目です。'
-            }
-            markedDates.push(markedDate);
+          if (!isEmpty(fullDate) && !isEmpty(value2) && fullDate === value2) {
+            selectDate = { type: 'divider', inset: true };
+            markedDates.push(selectDate);
+            selectDate = {
+              date: fullDate,
+              type: 2,
+              title: '付き合って' + i + '年目です。',
+              subtitle: '',
+              prependAvatar: '/_nuxt/assets/images/002.png'
+            };
+            markedDates.push(selectDate);
           }
         }
 
@@ -161,13 +182,17 @@ const calendarOfDetail = (value: any, value2: any) => {
           const fullDate: any = dayjs(getYear + "-" + getMonth + "-" + getDay);
           const plusDate: any = fullDate.add(i * 100, 'day').format('YYYY-MM-DD');
 
-          if (!isEmpty(plusDate) && !isEmpty(value2) && plusDate === value2.dateString) {
-            markedDate = {
-              'date': plusDate,
-              'type': 3,
-              'detail': '付き合って' + (i * 100) + '日目です。'
-            }
-            markedDates.push(markedDate);
+          if (!isEmpty(plusDate) && !isEmpty(value2) && plusDate === value2) {
+            selectDate = { type: 'divider', inset: true };
+            markedDates.push(selectDate);
+            selectDate = {
+              date: plusDate,
+              type: 3,
+              title: '付き合って' + (i * 100) + '日目です。',
+              subtitle: '',
+              prependAvatar: '/_nuxt/assets/images/003.png'
+            };
+            markedDates.push(selectDate);
           }
         }
       }
@@ -185,13 +210,17 @@ const calendarOfDetail = (value: any, value2: any) => {
             const getDay: String = getDate.day;
             const fullDate: any = dayjs(fullYear + "-" + getMonth + "-" + getDay).format('YYYY-MM-DD');
 
-            if (!isEmpty(fullDate) && !isEmpty(value2) && fullDate === value2.dateString) {
-              markedDate = {
-                'date': fullDate,
-                'type': 4,
-                'detail': getDate.title
-              }
-              markedDates.push(markedDate);
+            if (!isEmpty(fullDate) && !isEmpty(value2) && fullDate === value2) {
+              selectDate = { type: 'divider', inset: true };
+              markedDates.push(selectDate);
+              selectDate = {
+                date: fullDate,
+                type: 4,
+                title: getDate.title,
+                subtitle: '',
+                prependAvatar: '/_nuxt/assets/images/004.png'
+              };
+              markedDates.push(selectDate);
             }
           }
         });
@@ -205,6 +234,7 @@ const calendarOfDetail = (value: any, value2: any) => {
 
 export {
   isEmpty,
+  dateRaplace,
   withOfDate,
   calendarOfDate,
   calendarOfDetail

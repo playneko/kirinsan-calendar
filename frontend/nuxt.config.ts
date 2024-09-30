@@ -6,6 +6,9 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
+  generate: {
+    dir: 'dist',
+  },
   modules: [
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
@@ -13,7 +16,8 @@ export default defineNuxtConfig({
         config.plugins.push(vuetify({ autoImport: true }))
       })
     },
-    'dayjs-nuxt'
+    'dayjs-nuxt',
+    '@nuxtjs/device'
   ],
   vite: {
     vue: {
@@ -34,7 +38,16 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       // API URL
-      apiCalendarList: "http://localhost:3100/api/calendar/list",
+      apiCalendarList: "http://35.233.198.201:3100/api/calendar/list",
     }
   },
+  app: {
+    head: {
+      link: [
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Darumadrop+One&family=Hi+Melody&family=Kiwi+Maru:wght@300;400;500&family=Mochiy+Pop+One&family=Single+Day&display=swap' }
+      ]
+    }
+  }
 })

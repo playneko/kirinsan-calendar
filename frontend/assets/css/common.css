@@ -1,5 +1,13 @@
+body {
+  font-family: "Kiwi Maru", "Single Day", sans-serif, cursive;
+  font-weight: 400;
+  font-style: normal;
+}
 .text-center {
   text-align: center;
+}
+.margin-top_10 {
+  margin-top: 10px;
 }
 .margin-top_20 {
   margin-top: 20px;
@@ -19,6 +27,13 @@
 .vc-bordered {
   border: 0px solid !important;
 }
+.vc-container .vc-weekday-1, .vc-container .vc-weekday-7 {
+  color: #ee4f4f;
+}
 .font-title {
+  font-weight: bold;
+}
+.font-main-title {
+  font-size: x-large;
   font-weight: bold;
 }
