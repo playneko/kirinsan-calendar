@@ -7,7 +7,9 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "homepage": "https://github.com/playneko/kirinsan-calendar/",
+    "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
@@ -20,6 +22,7 @@
   },
   "devDependencies": {
     "@nuxtjs/device": "^3.2.4",
+    "push-dir": "^0.4.1",
     "vite-plugin-vuetify": "^2.0.4",
     "vuetify": "^3.7.2"
   }

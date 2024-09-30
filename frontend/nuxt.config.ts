@@ -6,9 +6,13 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
-  generate: {
-    dir: 'dist',
+  nitro : {
+    preset : 'github-pages' 
   },
+  app : {
+    baseURL : '/kirinsan-calendar/' 
+  },
+  ssr: false,
   modules: [
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
