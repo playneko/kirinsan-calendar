@@ -27,7 +27,7 @@
         />
       </client-only>
     </div>
-    <div v-if="!isEmpty(getDetailDates) && getDetailDates.length > 1" class="margin-top_20">
+    <div v-show="!isEmpty(getDetailDates) && getDetailDates.length > 1" class="margin-top_20">
       <v-card
         class="mx-auto"
         max-width="90%"
