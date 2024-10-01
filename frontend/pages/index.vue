@@ -55,14 +55,17 @@ const config = useRuntimeConfig();
 const { getDetailDates, setDetailDates } = useStates();
 
 // サーバから情報取得
-const { data: posts, pending } = await useFetch(config.public.apiCalendarList, { lazy: true });
+// const { data: posts, pending } = await useFetch(config.public.apiCalendarList, { lazy: true });
+const { data: posts, pending } = await useAsyncData('item', () => $fetch(`${config.public.apiCalendarList}`));
 
 // 付き合った日取得
-const withOfDateData = withOfDate(posts.value);
+const withOfDateData = await withOfDate(posts.value);
+// console.log(withOfDateData);
 
 // カレンダー計算
-const calendarOfDateData = calendarOfDate(posts.value);
+const calendarOfDateData = await calendarOfDate(posts.value);
 const attributes = ref(calendarOfDateData);
+// console.log(calendarOfDateData);
 
 // カレンダー選択
 const selectedValue = (event) => {
@@ -71,7 +74,7 @@ const selectedValue = (event) => {
     const thisDate = dateRaplace(event.target.attributes['aria-label'].value);
     const calendarOfDetailData = calendarOfDetail(posts.value, thisDate);
     setDetailDates(calendarOfDetailData);
-    console.log(calendarOfDetailData);
+    // console.log(calendarOfDetailData);
   } catch {
   }
 };

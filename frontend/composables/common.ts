@@ -14,7 +14,7 @@ const dateRaplace = (str: any) => {
 }
 
 // 付き合う日抽出
-const withOfDate = (value: any) => {
+const withOfDate = async (value: any) => {
   if (!isEmpty(value)) {
     const filterDate: any = value.filter((calendar: any) => {
       return calendar.type === 1;
@@ -34,7 +34,7 @@ const withOfDate = (value: any) => {
 }
 
 // カレンダー計算
-const calendarOfDate = (value: any) => {
+const calendarOfDate = async (value: any) => {
   let markedDates: Array<any> = new Array();
 
   if (!isEmpty(value)) {
@@ -153,7 +153,7 @@ const calendarOfDetail = (value: any, value2: any) => {
             type: 1,
             title: '付き合った日',
             subtitle: '',
-            prependAvatar: '/_nuxt/assets/images/001.png'
+            prependAvatar: 'https://firebasestorage.googleapis.com/v0/b/cocoatalk-41442.appspot.com/o/avata%2Fn-001.png?alt=media&token=5b9d7e4b-3db0-421f-b8ce-4530e831a4e6'
           };
           markedDates.push(selectDate);
         }
@@ -171,7 +171,7 @@ const calendarOfDetail = (value: any, value2: any) => {
               type: 2,
               title: '付き合って' + i + '年目です。',
               subtitle: '',
-              prependAvatar: '/_nuxt/assets/images/002.png'
+              prependAvatar: 'https://firebasestorage.googleapis.com/v0/b/cocoatalk-41442.appspot.com/o/avata%2Fn-002.png?alt=media&token=67d72d5b-6974-47b3-88f5-7f720d4709d6'
             };
             markedDates.push(selectDate);
           }
@@ -190,7 +190,7 @@ const calendarOfDetail = (value: any, value2: any) => {
               type: 3,
               title: '付き合って' + (i * 100) + '日目です。',
               subtitle: '',
-              prependAvatar: '/_nuxt/assets/images/003.png'
+              prependAvatar: 'https://firebasestorage.googleapis.com/v0/b/cocoatalk-41442.appspot.com/o/avata%2Fn-003.png?alt=media&token=5926e61b-df2c-44db-aee3-d6e58dc6ff8f'
             };
             markedDates.push(selectDate);
           }
@@ -218,7 +218,7 @@ const calendarOfDetail = (value: any, value2: any) => {
                 type: 4,
                 title: getDate.title,
                 subtitle: '',
-                prependAvatar: '/_nuxt/assets/images/004.png'
+                prependAvatar: 'https://firebasestorage.googleapis.com/v0/b/cocoatalk-41442.appspot.com/o/avata%2Fn-004.png?alt=media&token=8c2ead1d-6dba-40fa-bf30-a80017ab9e95'
               };
               markedDates.push(selectDate);
             }

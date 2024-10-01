@@ -22,9 +22,9 @@ export default defineNuxtConfig({
         { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Darumadrop+One&family=Hi+Melody&family=Kiwi+Maru:wght@300;400;500&family=Mochiy+Pop+One&family=Single+Day&display=swap' }
       ],
-      meta: [
-        { 'http-equiv': 'Content-Security-Policy', content: 'upgrade-insecure-requests' }
-      ]
+      // meta: [
+      //   { 'http-equiv': 'Content-Security-Policy', content: 'upgrade-insecure-requests' }
+      // ]
     }
   },
   ssr: false,
