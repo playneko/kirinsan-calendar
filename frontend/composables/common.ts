@@ -123,7 +123,7 @@ const calendarOfDate = async (value: any) => {
 const calendarOfDetail = (value: any, value2: any) => {
   let markedDates: Array<any> = new Array();
 
-  if (!isEmpty(value)) {
+  if (!isEmpty(value) && !isEmpty(value2)) {
     const today: Date = new Date();
     let fullYear: number = today.getFullYear();
     let withOfDate: any = dayjs(new Date()).format('YYYY-MM-DD');
