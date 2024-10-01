@@ -9,9 +9,18 @@ const isEmpty = (value: string | any[] | null | undefined) => {
 }
 
 const dateRaplace = (str: any) => {
-  const result = str.replace(/[^0-9]/g, ' ');
-  console.log(result);
-  return dayjs(result).format('YYYY-MM-DD');
+  const result = str.replace(/[^0-9]/g, ' ').split(' ');
+  let resultDay: string = "";
+  for (var i = 0; i < result.length; i++) {
+    if (!isEmpty(result[i])) {
+      if (!isEmpty(resultDay)) {
+        resultDay += "-";
+      }
+      resultDay += result[i];
+    }
+  }
+  console.log(resultDay);
+  return dayjs(resultDay).format('YYYY-MM-DD');
 }
 
 // 付き合う日抽出

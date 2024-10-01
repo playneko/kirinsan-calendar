@@ -73,7 +73,6 @@ const selectedValue = (event) => {
     // カレンダー詳細
     console.log(event.target.attributes['aria-label'].value);
     const thisDate = dateRaplace(event.target.attributes['aria-label'].value);
-    console.log(thisDate);
     const calendarOfDetailData = calendarOfDetail(posts.value, thisDate);
     setDetailDates(calendarOfDetailData);
     console.log(calendarOfDetailData);
