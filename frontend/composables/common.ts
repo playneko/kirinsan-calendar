@@ -10,6 +10,7 @@ const isEmpty = (value: string | any[] | null | undefined) => {
 
 const dateRaplace = (str: any) => {
   const result = str.replace(/[^0-9]/g, ' ');
+  console.log(result);
   return dayjs(result).format('YYYY-MM-DD');
 }
 
