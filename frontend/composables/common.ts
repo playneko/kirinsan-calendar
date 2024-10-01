@@ -19,7 +19,6 @@ const dateRaplace = (str: any) => {
       resultDay += result[i];
     }
   }
-  console.log(resultDay);
   return dayjs(resultDay).format('YYYY-MM-DD');
 }
 
