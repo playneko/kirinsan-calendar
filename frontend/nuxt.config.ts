@@ -62,6 +62,9 @@ export default defineNuxtConfig({
     public: {
       // API URL
       apiCalendarList: "https://api.playneko.com/api/calendar/list",
+      apiOptVerifyCheck: "https://api.playneko.com/api/opt/verify/check",
+      apiOptVerifyAccount: "https://api.playneko.com/api/opt/verify/account",
+      apiOptVerifyReSend: "https://api.playneko.com/api/opt/verify/resend",
     }
   }
 })

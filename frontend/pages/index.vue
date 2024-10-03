@@ -1,81 +1,169 @@
 <template>
   <div>
-    <v-card
-      class="mx-auto"
-      max-width="100%"
-    >
-      <v-img
-        height="270px"
-        src="/assets/images/pixil-frame-0.png"
-        cover
-        class="background_aeff50 top-left-radius_15 top-right-radius_15"
-      ></v-img>
-    </v-card>
-    <div class="text-center margin-top_20 margin-left_25 font-main-title">
-      ❤️기린상カップル❤️
-    </div>
-    <div class="margin-top_10 margin-left_25">
-      付き合った日：<span class="font-title">{{ withOfDateData }}</span>
-    </div>
-    <div class="text-center margin-top_20">
-      <client-only>
-        <VCalendar
-          style="width: 90%"
-          trim-weeks
-          :attributes="attributes"
-          @click="selectedValue($event)"
-        />
-      </client-only>
-    </div>
-    <div v-show="!isEmpty(getDetailDates) && getDetailDates.length > 1" class="margin-top_20">
-      <v-card
-        class="mx-auto"
-        max-width="90%"
+    <v-container v-if="!isEmpty(exception)" class="mx-auto" width="95%">
+      <v-alert
+        :text="exception"
+        title="エラー"
+        type="error"
+      ></v-alert>
+    </v-container>
+
+    <v-container v-if="!isVerify" class="mx-auto margin-top_20" width="80%">
+      <h3 class="text-h6 mb-4">アカウント認証</h3>
+
+      <v-text-field
+        label="E-mail"
+        variant="outlined"
+        single-line
+        v-model="email"
+      ></v-text-field>
+      <v-btn
+        :disabled="isLoading"
+        :loading="isLoading"
+        class="text-none mb-4"
+        color="indigo-darken-3"
+        size="x-large"
+        variant="flat"
+        block
+        @click="optVerifyCheck"
       >
-        <v-list
-          :items="getDetailDates"
-          lines="three"
-          item-props
-        >
-          <template v-slot:subtitle="{ subtitle }">
-            <div v-html="subtitle"></div>
-          </template>
-        </v-list>
-      </v-card>
+        メール認証
+      </v-btn>
+    </v-container>
+    <div
+      class="py-8 px-6 text-center mx-auto ma-4"
+      elevation="12"
+      max-width="400"
+      width="100%"
+      v-if="isVerify"
+    >
+      <h3 class="text-h6 mb-4">アカウント認証</h3>
+
+      <div class="text-body-2">
+        入力したメールアドレスを確認後、<br>
+        認証番号をメールに送り致します。<br>
+        しばらくして、メールを確認してください。
+      </div>
+
+      <v-sheet color="surface">
+        <v-otp-input
+          v-model="opt"
+          type="password"
+          variant="solo"
+        ></v-otp-input>
+      </v-sheet>
+
+      <v-btn
+        class="my-4"
+        color="light-blue-darken-2"
+        height="40"
+        text="コード認証"
+        variant="flat"
+        width="70%"
+        @click="optVerifyAccount"
+      ></v-btn>
+
+      <div class="text-caption">
+        認証メールが届いてない場合、 <a href="#">再送信</a>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useStates } from "../composables/states";
-import { isEmpty, dateRaplace, withOfDate, calendarOfDate, calendarOfDetail } from "~/composables/common";
+import { useException } from "~/composables/exception";
+import { useLoading } from "~/composables/loading";
+import { useAccount } from "~/composables/account";
+import { useVerify } from "~/composables/verify";
+import { useDatas } from "~/composables/datas";
+import { isEmpty } from "~/composables/common";
 
 const config = useRuntimeConfig();
-const { getDetailDates, setDetailDates } = useStates();
+const { exception, setException } = useException();
+const { isLoading, setLoading } = useLoading();
+const { isVerify, setVerify } = useVerify();
+const { account, setAccount } = useAccount();
+const { datas, setDatas } = useDatas();
+const email = ref();
+const opt = ref();
 
-// サーバから情報取得
-// const { data: posts, pending } = await useFetch(config.public.apiCalendarList, { lazy: true });
-const { data: posts, pending } = await useAsyncData('item', () => $fetch(`${config.public.apiCalendarList}`));
+setLoading(false);
+setVerify(false);
 
-// 付き合った日取得
-const withOfDateData = await withOfDate(posts.value);
-// console.log(withOfDateData);
+// メールアドレスチェックと認証番号発送
+const optVerifyCheck = async () => {
+  setException(null);
+  setLoading(true);
 
-// カレンダー計算
-const calendarOfDateData = await calendarOfDate(posts.value);
-const attributes = ref(calendarOfDateData);
-// console.log(calendarOfDateData);
+  if (isEmpty(email.value)) {
+    setException("メールアドレスを入力してください。");
+    setLoading(false);
+  } else {
+    const { data, pending } = await useAsyncData('item', () => $fetch(`${config.public.apiOptVerifyCheck}`, {
+      method: "POST",
+      body: {
+        email: email.value
+      }
+    }));
 
-// カレンダー選択
-const selectedValue = (event) => {
-  try {
-    // カレンダー詳細
-    const thisDate = dateRaplace(event.target.attributes['aria-label'].value);
-    const calendarOfDetailData = calendarOfDetail(posts.value, thisDate);
-    setDetailDates(calendarOfDetailData);
-    // console.log(calendarOfDetailData);
-  } catch {
+    if (!isEmpty(data.value)) {
+      setDatas(data.value);
+      setLoading(false);
+
+      if (!datas.value.success) {
+        setException(datas.value.message);
+      } else {
+        setVerify(true);
+      }
+    } else {
+      setException("システムエラーが発生しました。");
+      setLoading(false);
+    }
   }
-};
+}
+// 認証番号確認
+const optVerifyAccount = async () => {
+  setException(null);
+  setLoading(true);
+
+  if (isEmpty(opt.value)) {
+    setException("認証番号を入力してください。");
+    setLoading(false);
+  } else {
+    const { data, pending } = await useAsyncData('item', () => $fetch(`${config.public.apiOptVerifyAccount}`, {
+      method: "POST",
+      body: {
+        email: email.value,
+        pin_number: opt.value
+      }
+    }));
+
+    if (!isEmpty(data.value)) {
+      setDatas(data.value);
+      setLoading(false);
+
+      if (!datas.value.success) {
+        setException(datas.value.message);
+        setLoading(false);
+      } else {
+        // 成功
+        setAccount({
+          isVerify: true,
+          email: email.value
+        });
+        setLoading(false);
+        await navigateTo('/calendar');
+      }
+    } else {
+      setException("システムエラーが発生しました。");
+      setLoading(false);
+    }
+  }
+}
+// 認証番号再発送
+const optVerifyResend = () => {
+  setLoading(true);
+  console.log(opt.value);
+}
 </script>
