@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useStates } from "../composables/states";
-import { isEmpty, dateRaplace, withOfDate, calendarOfDate, calendarOfDetail } from "~/composables/common";
+import { isEmpty, dateRaplace, withOfDate, calendarOfDate, calendarOfDetail } from "../composables/common";
 
 const config = useRuntimeConfig();
 const { getDetailDates, setDetailDates } = useStates();

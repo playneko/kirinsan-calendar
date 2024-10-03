@@ -72,14 +72,16 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useException } from "~/composables/exception";
-import { useLoading } from "~/composables/loading";
-import { useAccount } from "~/composables/account";
-import { useVerify } from "~/composables/verify";
-import { useDatas } from "~/composables/datas";
-import { isEmpty } from "~/composables/common";
+import { useException } from "../composables/exception";
+import { useLoading } from "../composables/loading";
+import { useAccount } from "../composables/account";
+import { useVerify } from "../composables/verify";
+import { useDatas } from "../composables/datas";
+import { isEmpty } from "../composables/common";
 
 const config = useRuntimeConfig();
+const userInfo = useCookie<object | null>('userInfo');
+
 const { exception, setException } = useException();
 const { isLoading, setLoading } = useLoading();
 const { isVerify, setVerify } = useVerify();
@@ -148,10 +150,13 @@ const optVerifyAccount = async () => {
         setLoading(false);
       } else {
         // 成功
-        setAccount({
+        const verifyAccount = {
           isVerify: true,
           email: email.value
-        });
+        };
+        console.log(verifyAccount);
+        userInfo.value = verifyAccount;
+        setAccount(verifyAccount);
         setLoading(false);
         await navigateTo('/calendar');
       }
