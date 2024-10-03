@@ -147,7 +147,6 @@ const optVerifyAccount = async () => {
 
       if (!datas.value.success) {
         setException(datas.value.message);
-        setLoading(false);
       } else {
         // 成功
         const verifyAccount = {
@@ -156,7 +155,6 @@ const optVerifyAccount = async () => {
         };
         userInfo.value = verifyAccount;
         setAccount(verifyAccount);
-        setLoading(false);
         await navigateTo('/calendar');
       }
     } else {
@@ -167,7 +165,24 @@ const optVerifyAccount = async () => {
 }
 // 認証番号再発送
 const optVerifyResend = () => {
+  setException(null);
   setLoading(true);
-  console.log(opt.value);
+
+  const { data, pending } = await useAsyncData('item', () => $fetch(`${config.public.apiOptVerifyReSend}`, {
+    method: "POST",
+    body: {
+      email: email.value
+    }
+  }));
+
+  if (!isEmpty(data.value)) {
+    setLoading(false);
+    if (!datas.value.success) {
+      setException(datas.value.message);
+    }
+  } else {
+    setException("システムエラーが発生しました。");
+    setLoading(false);
+  }
 }
 </script>
