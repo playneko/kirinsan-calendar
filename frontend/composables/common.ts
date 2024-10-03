@@ -8,6 +8,7 @@ const isEmpty = (value: string | any[] | null | undefined) => {
   return false
 }
 
+// 日付変換処理(YYYY-MM-DD)
 const dateRaplace = (str: any) => {
   const result = str.replace(/[^0-9]/g, ' ').split(' ');
   let resultDay: string = "";
@@ -20,6 +21,11 @@ const dateRaplace = (str: any) => {
     }
   }
   return dayjs(resultDay).format('YYYY-MM-DD');
+}
+
+// 日付変換処理(YYYY年MM月DD日)
+const dateRaplace2 = (str: any) => {
+  return dayjs(str).format('YYYY年MM月DD日');
 }
 
 // 付き合う日抽出
@@ -244,6 +250,7 @@ const calendarOfDetail = (value: any, value2: any) => {
 export {
   isEmpty,
   dateRaplace,
+  dateRaplace2,
   withOfDate,
   calendarOfDate,
   calendarOfDetail

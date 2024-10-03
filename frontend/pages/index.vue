@@ -164,7 +164,7 @@ const optVerifyAccount = async () => {
   }
 }
 // 認証番号再発送
-const optVerifyResend = () => {
+const optVerifyResend = async () => {
   setException(null);
   setLoading(true);
 

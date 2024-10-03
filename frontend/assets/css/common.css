@@ -3,6 +3,9 @@ body {
   font-weight: 400;
   font-style: normal;
 }
+.width-90 {
+  width: 90%;
+}
 .text-center {
   text-align: center;
 }
@@ -14,6 +17,12 @@ body {
 }
 .margin-left_25 {
   margin-left: 25px;
+}
+.margin-bottom_10 {
+  margin-bottom: 10px;
+}
+.margin-center {
+  margin: 0 auto;
 }
 .background_aeff50 {
   background: #aeff50;
@@ -36,4 +45,60 @@ body {
 .font-main-title {
   font-size: x-large;
   font-weight: bold;
+}
+
+.calendar-title {
+  display: flex;
+  margin-top: 25px;
+  margin-left: 25px;
+  margin-right: 25px;
+  text-align: center;
+  justify-content: center;
+}
+
+/* アニメーション */
+.anime-rotete {
+  animation: anirotate 2s linear infinite;
+}
+@keyframes anirotate {
+  0%{
+    transform: rotate(10deg);
+    transition-duration: 0.8s;
+  }
+  10%{
+    transform: rotate(20deg);
+    transition-duration: 0.8s;
+  }
+  20%{
+    transform: rotate(30deg);
+    transition-duration: 0.8s;
+  }
+  30%{
+    transform: rotate(40deg);
+    transition-duration: 0.8s;
+  }
+  40%{
+    transform: rotate(45deg);
+    transition-duration: 0.8s;
+  }
+  50%{
+    transform: rotate(-10deg);
+    transition-duration: 0.8s;
+  }
+  60%{
+    transform: rotate(-20deg);
+    transition-duration: 0.8s;
+  }
+  70%{
+    transform: rotate(-30deg);
+    transition-duration: 0.8s;
+  }
+  80%{
+    transform: rotate(-40deg);
+    transition-duration: 0.8s;
+  }
+  90%{
+    transform: rotate(-45deg);
+    transition-duration: 0.8s;
+  }
 }
