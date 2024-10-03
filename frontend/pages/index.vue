@@ -154,7 +154,6 @@ const optVerifyAccount = async () => {
           isVerify: true,
           email: email.value
         };
-        console.log(verifyAccount);
         userInfo.value = verifyAccount;
         setAccount(verifyAccount);
         setLoading(false);
