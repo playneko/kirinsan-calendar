@@ -53,11 +53,55 @@
           size="large"
           variant="flat"
           block
+          @click="dialog = true"
         >
           {{dateRaplace2(thisDate)}} 予定追加
         </v-btn>
       </div>
     </div>
+
+    <v-dialog
+      v-model="dialog"
+      width="auto"
+    >
+      <v-card
+        max-width="400"
+        prepend-icon="mdi-calendar"
+        :title="dateRaplace2(thisDate) + '予定追加'"
+      >
+        <v-card-text>
+          <v-row dense>
+            <v-col
+              cols="12"
+              md="4"
+              sm="6"
+            >
+              ddd
+            </v-col>
+          </v-row>
+        </v-card-text>
+        <template v-slot:actions>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-btn
+              color="grey-lighten-1"
+              text="Close"
+              variant="flat"
+              @click="dialog = false"
+            ></v-btn>
+
+            <v-spacer></v-spacer>
+
+            <v-btn
+              color="blue-darken-1"
+              text="Save"
+              variant="flat"
+              @click="dialog = false"
+            ></v-btn>
+          </v-card-actions>
+        </template>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -66,6 +110,7 @@ import { ref } from 'vue';
 import { useStates } from "../composables/states";
 import { isEmpty, dateRaplace, dateRaplace2, withOfDate, calendarOfDate, calendarOfDetail } from "../composables/common";
 
+const dialog = ref(false);
 const config = useRuntimeConfig();
 const { thisDate, getDetailDates, setThisDate, setDetailDates } = useStates();
 
