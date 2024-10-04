@@ -16,7 +16,7 @@ export default defineNuxtConfig({
     }
   },
   app : {
-    baseURL : '/kirinsan-calendar/',
+    baseURL : '/',
     head: {
       link: [
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },

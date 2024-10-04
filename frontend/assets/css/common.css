@@ -61,43 +61,43 @@ body {
   animation: anirotate 2s linear infinite;
 }
 @keyframes anirotate {
-  0%{
+  0% {
     transform: rotate(10deg);
     transition-duration: 0.8s;
   }
-  10%{
+  10% {
     transform: rotate(20deg);
     transition-duration: 0.8s;
   }
-  20%{
+  20% {
     transform: rotate(30deg);
     transition-duration: 0.8s;
   }
-  30%{
+  30% {
     transform: rotate(40deg);
     transition-duration: 0.8s;
   }
-  40%{
+  40% {
     transform: rotate(45deg);
     transition-duration: 0.8s;
   }
-  50%{
+  50% {
     transform: rotate(-10deg);
     transition-duration: 0.8s;
   }
-  60%{
+  60% {
     transform: rotate(-20deg);
     transition-duration: 0.8s;
   }
-  70%{
+  70% {
     transform: rotate(-30deg);
     transition-duration: 0.8s;
   }
-  80%{
+  80% {
     transform: rotate(-40deg);
     transition-duration: 0.8s;
   }
-  90%{
+  90% {
     transform: rotate(-45deg);
     transition-duration: 0.8s;
   }
