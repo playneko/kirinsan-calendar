@@ -46,6 +46,9 @@ body {
   font-size: x-large;
   font-weight: bold;
 }
+.font-small {
+  font-size: small;
+}
 
 .calendar-title {
   display: flex;
@@ -54,6 +57,17 @@ body {
   margin-right: 25px;
   text-align: center;
   justify-content: center;
+}
+
+.calendar-stamp {
+  height: 200px;
+  overflow: auto;
+  max-height: max-content;
+}
+
+.calendar-select {
+  border-radius: 15px;
+  border: 3px solid rgb(255, 99, 99);
 }
 
 /* アニメーション */

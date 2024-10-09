@@ -53,9 +53,9 @@
           size="large"
           variant="flat"
           block
-          @click="dialog = true"
+          @click="dialogToggle"
         >
-          {{dateRaplace2(thisDate)}} 予定追加
+          イベント追加
         </v-btn>
       </div>
     </div>
@@ -67,8 +67,16 @@
       <v-card
         max-width="400"
         prepend-icon="mdi-calendar"
-        :title="dateRaplace2(thisDate) + '予定追加'"
+        :title="dateRaplace2(thisDate) + 'イベント追加'"
       >
+        <v-container v-if="!isEmpty(exception)" class="mx-auto font-small" width="95%">
+          <v-alert
+            :text="exception"
+            title="エラー"
+            type="error"
+          ></v-alert>
+        </v-container>
+
         <v-card-text>
           <v-row dense>
             <v-col
@@ -76,17 +84,79 @@
               md="4"
               sm="6"
             >
-              ddd
+              <v-select
+                clearable
+                label="イベント"
+                v-model="selectType"
+                :items="['誕生日','記念日','休暇','その他']"
+              ></v-select>
+            </v-col>
+          </v-row>
+          <v-row dense class="calendar-stamp text-center" v-if="!isEmpty(selectType)">
+            <v-col
+              v-for="item in imageList"
+              :key="item.key"
+              no-gutters
+              :class="item.key === selectImage ? 'calendar-select' : ''"
+              @click="selectImage = item.key"
+            >
+              <v-sheet class="pa-1 ma-1">
+                <v-avatar size="x-large">
+                  <v-img
+                    :src="item.value"
+                  ></v-img>
+                </v-avatar>
+              </v-sheet>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col
+              cols="12"
+              md="4"
+              sm="6"
+            >
+              <v-select
+                clearable
+                label="カラー"
+                v-model="selectColor"
+                :items="['green','pink','blue','red','black','purple','orange']"
+              ></v-select>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col
+              cols="12"
+              md="4"
+              sm="6"
+            >
+              <v-checkbox
+                v-model="selectRepeat"
+                label="繰り返し"
+              ></v-checkbox>
+            </v-col>
+          </v-row>
+          <v-row dense v-if="!isEmpty(selectType)">
+            <v-col
+              cols="12"
+              md="4"
+              sm="6"
+            >
+              <v-text-field
+                label="イベント内容"
+                v-model="eventTitle"
+              ></v-text-field>
             </v-col>
           </v-row>
         </v-card-text>
+        <v-divider></v-divider>
         <template v-slot:actions>
-          <v-divider></v-divider>
           <v-card-actions>
             <v-btn
               color="grey-lighten-1"
               text="Close"
               variant="flat"
+              :disabled="isLoading"
+              :loading="isLoading"
               @click="dialog = false"
             ></v-btn>
 
@@ -96,7 +166,9 @@
               color="blue-darken-1"
               text="Save"
               variant="flat"
-              @click="dialog = false"
+              :disabled="isLoading"
+              :loading="isLoading"
+              @click="calendarEventAdd"
             ></v-btn>
           </v-card-actions>
         </template>
@@ -108,24 +180,53 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useStates } from "../composables/states";
-import { isEmpty, dateRaplace, dateRaplace2, withOfDate, calendarOfDate, calendarOfDetail } from "../composables/common";
+import { useLoading } from "../composables/loading";
+import { useException } from "../composables/exception";
+import {
+  isEmpty,
+  dateRaplace,
+  dateRaplace2,
+  withOfDate,
+  calendarOfDate,
+  calendarOfDetail,
+  imageList,
+  getType,
+  getDateSplit
+} from "../composables/common";
 
+const selectType = ref();
+const selectImage = ref();
+const selectColor = ref();
+const selectRepeat = ref();
+const eventTitle = ref();
+const attributes = ref([]);
+const withOfDateData = ref();
+const postData = ref();
 const dialog = ref(false);
+const activeImage = ref('calendar-select');
 const config = useRuntimeConfig();
+const { isLoading, setLoading } = useLoading();
+const { exception, setException } = useException();
 const { thisDate, getDetailDates, setThisDate, setDetailDates } = useStates();
 
-// サーバから情報取得
-// const { data: posts, pending } = await useFetch(config.public.apiCalendarList, { lazy: true });
-const { data: posts, pending } = await useAsyncData('item', () => $fetch(`${config.public.apiCalendarList}`));
+// console.log(imageList);
 
-// 付き合った日取得
-const withOfDateData = await withOfDate(posts.value);
-// console.log(withOfDateData);
+const getAttributes = async () => {
+  // サーバから情報取得
+  // const { data: posts, pending } = await useFetch(config.public.apiCalendarList, { lazy: true });
+  const { data: posts, pending } = await useAsyncData('item', () => $fetch(`${config.public.apiCalendarList}`));
+  postData.value = posts.value;
 
-// カレンダー計算
-const calendarOfDateData = await calendarOfDate(posts.value);
-const attributes = ref(calendarOfDateData);
-// console.log(calendarOfDateData);
+  // 付き合った日取得
+  const getWithOfDate = await withOfDate(postData.value);
+  withOfDateData.value = getWithOfDate;
+  // console.log(withOfDateData);
+
+  // カレンダー計算
+  const getCalendarOfDate = await calendarOfDate(postData.value);
+  attributes.value = getCalendarOfDate;
+  // console.log(calendarOfDateData);
+}
 
 // カレンダー選択
 const selectedValue = (event) => {
@@ -135,7 +236,7 @@ const selectedValue = (event) => {
     setThisDate(selectDate);
 
     // カレンダー詳細
-    const calendarOfDetailData = calendarOfDetail(posts.value, selectDate);
+    const calendarOfDetailData = calendarOfDetail(postData.value, selectDate);
     setDetailDates(calendarOfDetailData);
     // console.log(calendarOfDetailData);
   } catch {
@@ -143,4 +244,87 @@ const selectedValue = (event) => {
     setDetailDates([]);
   }
 };
+
+// 選択カレンダーリフレッシュー
+const refreshValue = () => {
+  try {
+    // カレンダー詳細
+    const calendarOfDetailData = calendarOfDetail(postData.value, thisDate.value);
+    setDetailDates(calendarOfDetailData);
+  } catch {
+    setThisDate(null);
+    setDetailDates([]);
+  }
+};
+
+// イベント追加
+const calendarEventAdd = async () => {
+  setException(null);
+  setLoading(true);
+
+  // dialog.value = false;
+  if (isEmpty(selectType.value)) {
+    setException("イベントを選択してください。");
+    setLoading(false);
+  }
+  if (isEmpty(selectImage.value)) {
+    setException("イメージを選択してください。");
+    setLoading(false);
+  }
+  if (isEmpty(selectColor.value)) {
+    setException("カラーを選択してください。");
+    setLoading(false);
+  }
+  if (isEmpty(eventTitle.value)) {
+    setException("イベント内容を入力してください。");
+    setLoading(false);
+  }
+
+  const typeVal = getType(selectType.value);
+  const dateVal = getDateSplit(thisDate.value);
+  const { data, pending } = await useAsyncData('item', () => $fetch(`${config.public.apiCalendarEventAdd}`, {
+    method: "POST",
+    body: {
+      title: eventTitle.value,
+      type: typeVal,
+      year: !isEmpty(selectRepeat.value) ? null : dateVal[0],
+      month: dateVal[1],
+      day: dateVal[2],
+      image: selectImage.value,
+      color: selectColor.value,
+      repeat: isEmpty(selectRepeat.value) ? 0 : 1,
+      content: null
+    }
+  }));
+
+  if (!isEmpty(data.value)) {
+    setLoading(false);
+
+    if (!data.value.success) {
+      setException(data.value.message);
+    } else {
+      await getAttributes();
+      await refreshValue();
+      dialog.value = false;
+    }
+  } else {
+    setException("システムエラーが発生しました。");
+    setLoading(false);
+  }
+};
+
+// イベント追加ダイアログ
+const dialogToggle = () => {
+  setException(null);
+  setLoading(false);
+
+  dialog.value = true;
+  selectType.value = null;
+  selectImage.value = null;
+  selectColor.value = null;
+  selectRepeat.value = null;
+  eventTitle.value = null;
+}
+
+getAttributes();
 </script>
