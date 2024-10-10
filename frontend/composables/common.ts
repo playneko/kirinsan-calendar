@@ -330,7 +330,7 @@ const calendarOfDate = async (value: any) => {
       return calendar.type === 2;
     });
     if (!isEmpty(type2Date)) {
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 4; i++) {
         type2Date.map((getDate: any) => {
           if (!isEmpty(getDate)) {
             const getYear: String = isEmpty(getDate.year) ? fullYear : getDate.year;
@@ -345,6 +345,48 @@ const calendarOfDate = async (value: any) => {
               // markedDates = Object.assign({}, markedDates, selectDate);
               markedDates.push(selectDate);
             }
+          }
+        });
+        fullYear++;
+      }
+    }
+
+    // 記念日/休暇/その他かつ、繰り返しなし
+    const type3Date: any = value.filter((calendar: any) => {
+      return calendar.type > 2 && calendar.repeat === 0;
+    });
+    if (!isEmpty(type3Date)) {
+      type3Date.map((getDate: any) => {
+        const getYear: String = getDate.year;
+        const getMonth: String = getDate.month;
+        const getDay: String = getDate.day;
+        const getColor: String = getDate.color;
+        const fullDate = dayjs(getYear + "-" + getMonth + "-" + getDay).format('YYYY-MM-DD');
+
+        if (!isEmpty(fullDate)) {
+          selectDate = { highlight: { color: getColor, fillMode: 'outline' }, dates: [ fullDate ] };
+          markedDates.push(selectDate);
+        }
+      });
+    }
+
+    // 記念日/休暇/その他かつ、繰り返しあり
+    const type4Date: any = value.filter((calendar: any) => {
+      return calendar.type > 2 && calendar.repeat === 1;
+    });
+    if (!isEmpty(type4Date)) {
+      fullYear = today.getFullYear();
+      for (let i = 0; i < 4; i++) {
+        type4Date.map((getDate: any) => {
+          const getYear: String = fullYear.toString();
+          const getMonth: String = getDate.month;
+          const getDay: String = getDate.day;
+          const getColor: String = isEmpty(getDate.color) ? 'blue' : getDate.color;
+          const fullDate: any = dayjs(getYear + "-" + getMonth + "-" + getDay).format('YYYY-MM-DD');
+
+          if (!isEmpty(fullDate)) {
+            selectDate = { highlight: { color: getColor, fillMode: 'outline' }, dates: [ fullDate ] };
+            markedDates.push(selectDate);
           }
         });
         fullYear++;
@@ -404,7 +446,7 @@ const calendarOfDetail = (value: any, value2: any) => {
             markedDates.push(selectDate);
             selectDate = {
               date: fullDate,
-              type: 2,
+              type: 90,
               title: '付き合って' + i + '年目です。',
               subtitle: '',
               prependAvatar: 'https://firebasestorage.googleapis.com/v0/b/cocoatalk-41442.appspot.com/o/avata%2Fn-002.png?alt=media&token=67d72d5b-6974-47b3-88f5-7f720d4709d6'
@@ -423,7 +465,7 @@ const calendarOfDetail = (value: any, value2: any) => {
             markedDates.push(selectDate);
             selectDate = {
               date: plusDate,
-              type: 3,
+              type: 91,
               title: '付き合って' + (i * 100) + '日目です。',
               subtitle: '',
               prependAvatar: 'https://firebasestorage.googleapis.com/v0/b/cocoatalk-41442.appspot.com/o/avata%2Fn-003.png?alt=media&token=5926e61b-df2c-44db-aee3-d6e58dc6ff8f'
@@ -440,7 +482,7 @@ const calendarOfDetail = (value: any, value2: any) => {
     });
     if (!isEmpty(type2Date)) {
       let tempDate: any = '';
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 4; i++) {
         type2Date.map((getDate: any) => {
           if (!isEmpty(getDate)) {
             const getYear: String = isEmpty(getDate.year) ? fullYear : getDate.year;
@@ -454,13 +496,69 @@ const calendarOfDetail = (value: any, value2: any) => {
               markedDates.push(selectDate);
               selectDate = {
                 date: fullDate,
-                type: 4,
+                type: 2,
                 title: getDate.title,
                 subtitle: '',
                 prependAvatar: isEmpty(getDate.image) ? 'https://firebasestorage.googleapis.com/v0/b/cocoatalk-41442.appspot.com/o/avata%2Fn-004.png?alt=media&token=8c2ead1d-6dba-40fa-bf30-a80017ab9e95' : getImage(getDate.image)
               };
               markedDates.push(selectDate);
             }
+          }
+        });
+        fullYear++;
+      }
+    }
+
+    // 記念日/休暇/その他かつ、繰り返しなし
+    const type3Date: any = value.filter((calendar: any) => {
+      return calendar.type > 2 && calendar.repeat === 0;
+    });
+    if (!isEmpty(type3Date)) {
+      type3Date.map((getDate: any) => {
+        const getYear: String = getDate.year;
+        const getMonth: String = getDate.month;
+        const getDay: String = getDate.day;
+        const fullDate = dayjs(getYear + "-" + getMonth + "-" + getDay).format('YYYY-MM-DD');
+
+        if (!isEmpty(fullDate) && !isEmpty(value2) && fullDate === value2) {
+          selectDate = { type: 'divider', inset: true };
+          markedDates.push(selectDate);
+          selectDate = {
+            date: fullDate,
+            type: getDate.type,
+            title: getDate.title,
+            subtitle: '',
+            prependAvatar: isEmpty(getDate.image) ? '' : getImage(getDate.image)
+          };
+          markedDates.push(selectDate);
+        }
+      });
+    }
+
+    // 記念日/休暇/その他かつ、繰り返しあり
+    const type4Date: any = value.filter((calendar: any) => {
+      return calendar.type > 2 && calendar.repeat === 1;
+    });
+    if (!isEmpty(type4Date)) {
+      fullYear = today.getFullYear();
+      for (let i = 0; i < 4; i++) {
+        type4Date.map((getDate: any) => {
+          const getYear: String = fullYear.toString();
+          const getMonth: String = getDate.month;
+          const getDay: String = getDate.day;
+          const fullDate: any = dayjs(getYear + "-" + getMonth + "-" + getDay).format('YYYY-MM-DD');
+
+          if (!isEmpty(fullDate) && !isEmpty(value2) && fullDate === value2) {
+            selectDate = { type: 'divider', inset: true };
+            markedDates.push(selectDate);
+            selectDate = {
+              date: fullDate,
+              type: getDate.type,
+              title: getDate.title,
+              subtitle: '',
+              prependAvatar: isEmpty(getDate.image) ? '' : getImage(getDate.image)
+            };
+            markedDates.push(selectDate);
           }
         });
         fullYear++;
