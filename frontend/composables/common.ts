@@ -406,9 +406,10 @@ const calendarOfDetail = (value: any, value2: any) => {
     let fullYear: number = today.getFullYear();
     let withOfDate: any = dayjs(new Date()).format('YYYY-MM-DD');
     let selectDate: Object;
+    let index: number = 0;
 
     // 現在の日付
-    selectDate = { type: 'subheader', title: dayjs(value2).format('YYYY年MM月DD日') };
+    selectDate = { type: 'subheader', titleDate: dayjs(value2).format('YYYY年MM月DD日') };
     markedDates.push(selectDate);
 
     // 付き合う日抽出
@@ -424,14 +425,17 @@ const calendarOfDetail = (value: any, value2: any) => {
         withOfDate = dayjs(getYear + "-" + getMonth + "-" + getDay).format('YYYY-MM-DD');
 
         if (!isEmpty(withOfDate) && !isEmpty(value2) && withOfDate === value2) {
-          selectDate = { type: 'divider', inset: true };
-          markedDates.push(selectDate);
+          // selectDate = { type: 'divider', inset: true };
+          // markedDates.push(selectDate);
           selectDate = {
+            no: getDate.no,
+            index: index++,
             date: withOfDate,
             type: 1,
             title: '付き合った日',
             subtitle: '',
-            prependAvatar: 'https://firebasestorage.googleapis.com/v0/b/cocoatalk-41442.appspot.com/o/avata%2Fn-001.png?alt=media&token=5b9d7e4b-3db0-421f-b8ce-4530e831a4e6'
+            prependAvatar: 'https://firebasestorage.googleapis.com/v0/b/cocoatalk-41442.appspot.com/o/avata%2Fn-001.png?alt=media&token=5b9d7e4b-3db0-421f-b8ce-4530e831a4e6',
+            isModify: false
           };
           markedDates.push(selectDate);
         }
@@ -442,14 +446,17 @@ const calendarOfDetail = (value: any, value2: any) => {
           const fullDate: any = dayjs(fullYear + "-" + getMonth + "-" + getDay).format('YYYY-MM-DD');
 
           if (!isEmpty(fullDate) && !isEmpty(value2) && fullDate === value2) {
-            selectDate = { type: 'divider', inset: true };
-            markedDates.push(selectDate);
+            // selectDate = { type: 'divider', inset: true };
+            // markedDates.push(selectDate);
             selectDate = {
+              no: getDate.no,
+              index: index++,
               date: fullDate,
               type: 90,
               title: '付き合って' + i + '年目です。',
               subtitle: '',
-              prependAvatar: 'https://firebasestorage.googleapis.com/v0/b/cocoatalk-41442.appspot.com/o/avata%2Fn-002.png?alt=media&token=67d72d5b-6974-47b3-88f5-7f720d4709d6'
+              prependAvatar: 'https://firebasestorage.googleapis.com/v0/b/cocoatalk-41442.appspot.com/o/avata%2Fn-002.png?alt=media&token=67d72d5b-6974-47b3-88f5-7f720d4709d6',
+              isModify: false
             };
             markedDates.push(selectDate);
           }
@@ -461,14 +468,17 @@ const calendarOfDetail = (value: any, value2: any) => {
           const plusDate: any = fullDate.add(i * 100, 'day').format('YYYY-MM-DD');
 
           if (!isEmpty(plusDate) && !isEmpty(value2) && plusDate === value2) {
-            selectDate = { type: 'divider', inset: true };
-            markedDates.push(selectDate);
+            // selectDate = { type: 'divider', inset: true };
+            // markedDates.push(selectDate);
             selectDate = {
+              no: getDate.no,
+              index: index++,
               date: plusDate,
               type: 91,
               title: '付き合って' + (i * 100) + '日目です。',
               subtitle: '',
-              prependAvatar: 'https://firebasestorage.googleapis.com/v0/b/cocoatalk-41442.appspot.com/o/avata%2Fn-003.png?alt=media&token=5926e61b-df2c-44db-aee3-d6e58dc6ff8f'
+              prependAvatar: 'https://firebasestorage.googleapis.com/v0/b/cocoatalk-41442.appspot.com/o/avata%2Fn-003.png?alt=media&token=5926e61b-df2c-44db-aee3-d6e58dc6ff8f',
+              isModify: false
             };
             markedDates.push(selectDate);
           }
@@ -492,14 +502,21 @@ const calendarOfDetail = (value: any, value2: any) => {
 
             if (!isEmpty(fullDate) && !isEmpty(value2) && fullDate === value2 && tempDate !== fullDate) {
               tempDate = fullDate;
-              selectDate = { type: 'divider', inset: true };
-              markedDates.push(selectDate);
+              // selectDate = { type: 'divider', inset: true };
+              // markedDates.push(selectDate);
               selectDate = {
+                no: getDate.no,
+                image: getDate.image,
+                color: getDate.color,
+                repeat: getDate.repeat,
+                content: getDate.content,
+                index: index++,
                 date: fullDate,
                 type: 2,
                 title: getDate.title,
                 subtitle: '',
-                prependAvatar: isEmpty(getDate.image) ? 'https://firebasestorage.googleapis.com/v0/b/cocoatalk-41442.appspot.com/o/avata%2Fn-004.png?alt=media&token=8c2ead1d-6dba-40fa-bf30-a80017ab9e95' : getImage(getDate.image)
+                prependAvatar: isEmpty(getDate.image) ? 'https://firebasestorage.googleapis.com/v0/b/cocoatalk-41442.appspot.com/o/avata%2Fn-004.png?alt=media&token=8c2ead1d-6dba-40fa-bf30-a80017ab9e95' : getImage(getDate.image),
+                isModify: true
               };
               markedDates.push(selectDate);
             }
@@ -521,14 +538,21 @@ const calendarOfDetail = (value: any, value2: any) => {
         const fullDate = dayjs(getYear + "-" + getMonth + "-" + getDay).format('YYYY-MM-DD');
 
         if (!isEmpty(fullDate) && !isEmpty(value2) && fullDate === value2) {
-          selectDate = { type: 'divider', inset: true };
-          markedDates.push(selectDate);
+          // selectDate = { type: 'divider', inset: true };
+          // markedDates.push(selectDate);
           selectDate = {
+            no: getDate.no,
+            image: getDate.image,
+            color: getDate.color,
+            repeat: getDate.repeat,
+            content: getDate.content,
+            index: index++,
             date: fullDate,
             type: getDate.type,
             title: getDate.title,
             subtitle: '',
-            prependAvatar: isEmpty(getDate.image) ? '' : getImage(getDate.image)
+            prependAvatar: isEmpty(getDate.image) ? '' : getImage(getDate.image),
+            isModify: true
           };
           markedDates.push(selectDate);
         }
@@ -549,14 +573,21 @@ const calendarOfDetail = (value: any, value2: any) => {
           const fullDate: any = dayjs(getYear + "-" + getMonth + "-" + getDay).format('YYYY-MM-DD');
 
           if (!isEmpty(fullDate) && !isEmpty(value2) && fullDate === value2) {
-            selectDate = { type: 'divider', inset: true };
-            markedDates.push(selectDate);
+            // selectDate = { type: 'divider', inset: true };
+            // markedDates.push(selectDate);
             selectDate = {
+              no: getDate.no,
+              image: getDate.image,
+              color: getDate.color,
+              repeat: getDate.repeat,
+              content: getDate.content,
+              index: index++,
               date: fullDate,
               type: getDate.type,
               title: getDate.title,
               subtitle: '',
-              prependAvatar: isEmpty(getDate.image) ? '' : getImage(getDate.image)
+              prependAvatar: isEmpty(getDate.image) ? '' : getImage(getDate.image),
+              isModify: true
             };
             markedDates.push(selectDate);
           }
@@ -578,6 +609,15 @@ const getType = (value: any) => {
   else { return 0; }
 }
 
+// イベントタイプ
+const getTypeReverse = (value: any) => {
+  if (value === 2) { return '誕生日'; }
+  else if (value === 3) { return '記念日'; }
+  else if (value === 4) { return '休暇'; }
+  else if (value === 5) { return 'その他'; }
+  else { return 'その他'; }
+}
+
 // 年月日を分離
 const getDateSplit = (value: any) => {
   return value.split('-');
@@ -592,6 +632,7 @@ export {
   calendarOfDate,
   calendarOfDetail,
   getType,
+  getTypeReverse,
   getDateSplit,
   imageList
 };

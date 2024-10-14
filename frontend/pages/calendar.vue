@@ -34,15 +34,29 @@
         class="mx-auto"
         max-width="90%"
       >
-        <v-list
-          :items="getDetailDates"
-          lines="three"
-          item-props
-        >
-          <template v-slot:subtitle="{ subtitle }">
-            <div v-html="subtitle"></div>
-          </template>
-        </v-list>
+        <v-list-subheader inset class="padding-left_15">{{ !isEmpty(getDetailDates) ? getDetailDates[0].titleDate : '' }}</v-list-subheader>
+        <div v-for="(item, itemIndex) in getDetailDates" :key="itemIndex">
+          <v-list-item
+            v-if="itemIndex > 0"
+            :key="item.index"
+            :subtitle="item.title"
+          >
+            <template v-slot:prepend>
+              <v-avatar>
+                <v-img :src="item.prependAvatar"></v-img>
+              </v-avatar>
+            </template>
+            <template v-slot:append v-if="item.isModify">
+              <v-btn
+                size="small"
+                variant="flat"
+                color="brown-lighten-2"
+                @click="dialogToggleModify(item)"
+              >修正</v-btn>
+            </template>
+          </v-list-item>
+          <v-divider inset></v-divider>
+        </div>
       </v-card>
     </div>
     <div v-if="!isEmpty(thisDate)" class="text-center margin-center width-90">
@@ -153,7 +167,7 @@
           <v-card-actions>
             <v-btn
               color="grey-lighten-1"
-              text="Close"
+              text="閉じる"
               variant="flat"
               :disabled="isLoading"
               :loading="isLoading"
@@ -163,12 +177,24 @@
             <v-spacer></v-spacer>
 
             <v-btn
+              color="red"
+              text="削除"
+              variant="flat"
+              v-if="isModify"
+              :disabled="isLoading"
+              :loading="isLoading"
+              @click="calendarEventAdd(1)"
+            ></v-btn>
+
+            <v-spacer></v-spacer>
+
+            <v-btn
               color="blue-darken-1"
-              text="Save"
+              text="保存"
               variant="flat"
               :disabled="isLoading"
               :loading="isLoading"
-              @click="calendarEventAdd"
+              @click="calendarEventAdd(2)"
             ></v-btn>
           </v-card-actions>
         </template>
@@ -191,9 +217,11 @@ import {
   calendarOfDetail,
   imageList,
   getType,
+  getTypeReverse,
   getDateSplit
 } from "../composables/common";
 
+const selectNo = ref(0);
 const selectType = ref();
 const selectImage = ref();
 const selectColor = ref();
@@ -203,6 +231,7 @@ const attributes = ref([]);
 const withOfDateData = ref();
 const postData = ref();
 const dialog = ref(false);
+const isModify = ref(false);
 const activeImage = ref('calendar-select');
 const config = useRuntimeConfig();
 const { isLoading, setLoading } = useLoading();
@@ -238,7 +267,7 @@ const selectedValue = (event) => {
     // カレンダー詳細
     const calendarOfDetailData = calendarOfDetail(postData.value, selectDate);
     setDetailDates(calendarOfDetailData);
-    // console.log(calendarOfDetailData);
+    console.log(calendarOfDetailData);
   } catch {
     setThisDate(null);
     setDetailDates([]);
@@ -258,7 +287,7 @@ const refreshValue = () => {
 };
 
 // イベント追加
-const calendarEventAdd = async () => {
+const calendarEventAdd = async (type) => {
   setException(null);
   setLoading(true);
 
@@ -280,11 +309,22 @@ const calendarEventAdd = async () => {
     setLoading(false);
   }
 
+  let apiUrl = config.public.apiCalendarEventAdd;
+  // 削除処理
+  if (isModify.value && selectNo.value > 0 && type == 1) {
+    apiUrl = config.public.apiCalendarEventyDelete;
+    // 修正処理
+  } else if (isModify.value && selectNo.value > 0 && type == 2) {
+    apiUrl = config.public.apiCalendarEventModify;
+  }
+
+  const dataNo = isModify.value ? selectNo.value : null;
   const typeVal = getType(selectType.value);
   const dateVal = getDateSplit(thisDate.value);
-  const { data, pending } = await useAsyncData('item', () => $fetch(`${config.public.apiCalendarEventAdd}`, {
+  const { data, pending } = await useAsyncData('item', () => $fetch(`${apiUrl}`, {
     method: "POST",
     body: {
+      no: dataNo,
       title: eventTitle.value,
       type: typeVal,
       year: !isEmpty(selectRepeat.value) ? null : dateVal[0],
@@ -319,11 +359,28 @@ const dialogToggle = () => {
   setLoading(false);
 
   dialog.value = true;
+  isModify.value = false;
+  selectNo.value = 0;
   selectType.value = null;
   selectImage.value = null;
   selectColor.value = null;
   selectRepeat.value = null;
   eventTitle.value = null;
+}
+
+// イベント追加ダイアログ(修正)
+const dialogToggleModify = (item) => {
+  setException(null);
+  setLoading(false);
+
+  dialog.value = true;
+  isModify.value = true;
+  selectNo.value = item.no;
+  selectType.value = getTypeReverse(item.type);
+  selectImage.value = item.image;
+  selectColor.value = item.color;
+  selectRepeat.value = item.repeat === 1 ? true : false;
+  eventTitle.value = item.title;
 }
 
 getAttributes();

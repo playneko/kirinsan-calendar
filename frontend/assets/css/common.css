@@ -24,6 +24,9 @@ body {
 .margin-center {
   margin: 0 auto;
 }
+.padding-left_15 {
+  padding-left: 15px;
+}
 .background_aeff50 {
   background: #aeff50;
 }
@@ -48,6 +51,9 @@ body {
 }
 .font-small {
   font-size: small;
+}
+.display-content .v-list-item__content {
+  display: contents;
 }
 
 .calendar-title {
