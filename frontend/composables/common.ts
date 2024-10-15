@@ -491,7 +491,6 @@ const calendarOfDetail = (value: any, value2: any) => {
       return calendar.type === 2;
     });
     if (!isEmpty(type2Date)) {
-      let tempDate: any = '';
       for (let i = 0; i < 4; i++) {
         type2Date.map((getDate: any) => {
           if (!isEmpty(getDate)) {
@@ -500,8 +499,7 @@ const calendarOfDetail = (value: any, value2: any) => {
             const getDay: String = getDate.day;
             const fullDate: any = dayjs(getYear + "-" + getMonth + "-" + getDay).format('YYYY-MM-DD');
 
-            if (!isEmpty(fullDate) && !isEmpty(value2) && fullDate === value2 && tempDate !== fullDate) {
-              tempDate = fullDate;
+            if (!isEmpty(fullDate) && !isEmpty(value2) && fullDate === value2) {
               // selectDate = { type: 'divider', inset: true };
               // markedDates.push(selectDate);
               selectDate = {

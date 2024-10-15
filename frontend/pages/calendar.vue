@@ -267,7 +267,7 @@ const selectedValue = (event) => {
     // カレンダー詳細
     const calendarOfDetailData = calendarOfDetail(postData.value, selectDate);
     setDetailDates(calendarOfDetailData);
-    console.log(calendarOfDetailData);
+    // console.log(calendarOfDetailData);
   } catch {
     setThisDate(null);
     setDetailDates([]);
